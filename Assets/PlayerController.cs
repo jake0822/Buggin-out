@@ -3,8 +3,9 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour //Network Behavior for multi
 {
     [SerializeField] public float speed = 5f;
     [SerializeField] private float jumpDelay = 0.5f;
@@ -41,10 +42,17 @@ public class PlayerController : NetworkBehaviour
     }
     private void Start()
     {
-        
+        _collider = GetComponent<CapsuleCollider>();
+        _controller = GetComponent<CharacterController>();
+
+        castHeight = (_collider.height / 2 * transform.localScale.y) - _collider.height * 0.25f;
+        radius = _collider.radius;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
     }
-    public override void OnNetworkSpawn()
+   /* public override void OnNetworkSpawn()
     {
         _collider = GetComponent<CapsuleCollider>();
         _controller = GetComponent<CharacterController>();
@@ -69,7 +77,8 @@ public class PlayerController : NetworkBehaviour
             cinemachineCamera.enabled = false;
         }
         base.OnNetworkSpawn();
-    }
+    }*/
+   
 
     private bool isGrounded() //This is raycast based grounded function. It creates four raycasts below the player to detect the ground
     {
@@ -104,7 +113,7 @@ public class PlayerController : NetworkBehaviour
 
     private void Update() //this function runs once every frame
     {
-       if(!checkOwner.checkForOwner()) return;
+       //if(!checkOwner.checkForOwner()) return;
         
 
         //print(_externalMomentum);
@@ -158,15 +167,15 @@ public class PlayerController : NetworkBehaviour
 
     public void Move(InputAction.CallbackContext context) //detects input for movement
     {
-        if (!checkOwner.checkForOwner()) return;
+       // if (!checkOwner.checkForOwner()) return;
         print("moving");
         _moveInput = context.ReadValue<Vector2>();
     }
 
     public void Jump(InputAction.CallbackContext context) //detects input for jump
     {
-        if (checkOwner.checkForOwner())
-        {
+        //if (checkOwner.checkForOwner())
+        //{
 
             if (_grounded && context.performed)
             {
@@ -177,7 +186,7 @@ public class PlayerController : NetworkBehaviour
             {
                 StartCoroutine(CoyoteJumpTimer());
             }
-        }
+        //}
     }
 
     private IEnumerator CoyoteJumpTimer()
