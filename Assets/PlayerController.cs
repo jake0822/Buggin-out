@@ -1,8 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Netcode;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour //Network Behavior for multi
 {
     [SerializeField] public float speed = 5f;
     [SerializeField] private float jumpDelay = 0.5f;
@@ -12,6 +15,12 @@ public class PlayerController : MonoBehaviour
 
     public new Transform camera;
 
+    public CheckOwner checkOwner;
+
+    public Camera TheCamera;
+    public CinemachineBrain brain;
+    public CinemachineCamera cinemachineCamera;
+        
     private CharacterController _controller;
     private CapsuleCollider _collider;
     private Vector2 _moveInput;
@@ -43,6 +52,33 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
     }
+   /* public override void OnNetworkSpawn()
+    {
+        _collider = GetComponent<CapsuleCollider>();
+        _controller = GetComponent<CharacterController>();
+
+        castHeight = (_collider.height / 2 * transform.localScale.y) - _collider.height * 0.25f;
+        radius = _collider.radius;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        if (checkOwner.checkForOwner())
+        {
+            TheCamera.enabled = true;
+            brain.enabled = true;
+            cinemachineCamera.enabled = true;
+            
+        }
+        else
+        {
+            brain.enabled = false;
+            TheCamera.enabled = false;
+            cinemachineCamera.enabled = false;
+        }
+        base.OnNetworkSpawn();
+    }*/
+   
 
     private bool isGrounded() //This is raycast based grounded function. It creates four raycasts below the player to detect the ground
     {
@@ -77,6 +113,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update() //this function runs once every frame
     {
+       //if(!checkOwner.checkForOwner()) return;
+        
+
         //print(_externalMomentum);
         _grounded = isGrounded(); //checks if the player is grounded
         if (_grounded && coyoteJump) //checks if need to do coyote jump
@@ -128,22 +167,26 @@ public class PlayerController : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context) //detects input for movement
     {
+       // if (!checkOwner.checkForOwner()) return;
         print("moving");
         _moveInput = context.ReadValue<Vector2>();
     }
 
     public void Jump(InputAction.CallbackContext context) //detects input for jump
     {
+        //if (checkOwner.checkForOwner())
+        //{
 
-        if (_grounded && context.performed)
-        {
-            _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); //applies jump force
-            coyoteJump = false;
-        }
-        else if (context.performed)
-        {
-            StartCoroutine(CoyoteJumpTimer());
-        }
+            if (_grounded && context.performed)
+            {
+                _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); //applies jump force
+                coyoteJump = false;
+            }
+            else if (context.performed)
+            {
+                StartCoroutine(CoyoteJumpTimer());
+            }
+        //}
     }
 
     private IEnumerator CoyoteJumpTimer()
