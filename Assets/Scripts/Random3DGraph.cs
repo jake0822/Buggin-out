@@ -10,9 +10,9 @@ public class Random3DGraph : MonoBehaviour
     public bool requireLineOfSight = true;
     public GameObject nodePrefab; // optional visual sphere
 
-    [HideInInspector] public List<WaypointNode> nodes = new List<WaypointNode>();
+    public List<WaypointNode> nodes = new List<WaypointNode>();
 
-    void Start()
+    void Awake()
     {
         GenerateNodes();
         ConnectNodes();
