@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour //Network Behavior for multi
 
     public CheckOwner checkOwner;
 
-    public Camera TheCamera;
+    public Camera MainCamera;
+    public Camera PictureCamera;
     public CinemachineBrain brain;
     public CinemachineCamera cinemachineCamera;
         
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviour //Network Behavior for multi
     private Vector2 _moveInput;
     private Vector3 _velocity;
     private Vector3 _horizontalVelocity = Vector3.zero;
+
+    private bool isRightClickHeld = false;
 
     private float castHeight;
     private float radius;
@@ -152,6 +155,18 @@ public class PlayerController : MonoBehaviour //Network Behavior for multi
             _horizontalVelocity = Vector3.MoveTowards(_horizontalVelocity, Vector3.zero, decel * Time.deltaTime);
         }
 
+        //Camera input
+        if (isRightClickHeld)
+        {
+            MainCamera.gameObject.SetActive(false);   // Disable main camera's game object
+            PictureCamera.gameObject.SetActive(true); // Enable picture camera's game object
+        }
+        else
+        {
+            PictureCamera.gameObject.SetActive(false); // Disable picture camera's game object
+            MainCamera.gameObject.SetActive(true);     // Enable main camera's game object
+        }
+
         // --- Combine horizontal + vertical ---
         Vector3 finalVelocity = _horizontalVelocity + Vector3.up * _velocity.y;
 
@@ -196,4 +211,22 @@ public class PlayerController : MonoBehaviour //Network Behavior for multi
         coyoteJump = false;
 
     }
+
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            isRightClickHeld = true; // Right-click pressed
+            Debug.Log("Right-click started");
+        }
+
+        if (context.canceled)
+        {
+            isRightClickHeld = false; // Right-click released
+            Debug.Log("Right-click released");
+        }
+    }
+
 }
+
+
