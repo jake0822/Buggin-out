@@ -180,6 +180,18 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: -5610832936595009893, guid: 671c9295ab67a5e419e9fb96f4a8b4b9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5610832936595009893, guid: 671c9295ab67a5e419e9fb96f4a8b4b9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5610832936595009893, guid: 671c9295ab67a5e419e9fb96f4a8b4b9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4292154010595695564, guid: 671c9295ab67a5e419e9fb96f4a8b4b9, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -208,6 +220,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 2786534777698132407, guid: 671c9295ab67a5e419e9fb96f4a8b4b9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d281f2d55aa52f14a8e4a172f8454e80, type: 2}
     - target: {fileID: 6507901977716847365, guid: 671c9295ab67a5e419e9fb96f4a8b4b9, type: 3}
       propertyPath: m_Layer
       value: 3
