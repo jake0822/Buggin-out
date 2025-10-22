@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PictureMode : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class PictureMode : MonoBehaviour
     [SerializeField] private float normalFOV = 60f;
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private Camera outputCam;
+    [SerializeField] private Texture2D defaultPic;
+    [SerializeField] private RawImage crosshair;
 
     public int photoWidth = 512;
     public int photoHeight = 512;
@@ -81,7 +84,19 @@ public class PictureMode : MonoBehaviour
 
     private void Update()
     {
-        float targetFOV = rightClickPressed ? zoomedFOV : normalFOV;
+        if (rightClickPressed)
+        {
+            Color c = crosshair.color;
+            c.a = 1f;
+            crosshair.color = c;
+        }
+        else
+        {
+            Color c = crosshair.color;
+            c.a = 0f;
+            crosshair.color = c;
+        }
+            float targetFOV = rightClickPressed ? zoomedFOV : normalFOV;
 
         // Smoothly interpolate toward the target FOV
         pictureCam.Lens.FieldOfView = Mathf.Lerp(
@@ -98,7 +113,7 @@ public class PictureMode : MonoBehaviour
         }
         else
         {
-            return null;
+            return defaultPic;
         }
     }
 }
