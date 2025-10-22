@@ -730,7 +730,7 @@ MonoBehaviour:
   zoomSpeed: 5
   outputCam: {fileID: 0}
   defaultPic: {fileID: 2800000, guid: f2ca2bde899f7894c992d08b3d54f984, type: 3}
-  crosshair: {fileID: 1766176861}
+  crosshair: {fileID: 1947036455}
   photoWidth: 512
   photoHeight: 512
 --- !u!114 &631174270 stripped
