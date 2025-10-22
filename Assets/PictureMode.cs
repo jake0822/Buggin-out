@@ -1,0 +1,104 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PictureMode : MonoBehaviour
+{
+    public bool rightClickPressed = false;
+    public CinemachineCamera pictureCam;
+
+    [SerializeField] private float zoomedFOV = 30f;
+    [SerializeField] private float normalFOV = 60f;
+    [SerializeField] private float zoomSpeed = 5f;
+    [SerializeField] private Camera outputCam;
+
+    public int photoWidth = 512;
+    public int photoHeight = 512;
+
+    private List<Texture2D> photoAlbum = new List<Texture2D>();
+    private RenderTexture renderTex;
+
+    private void Start()
+    {
+        renderTex = new RenderTexture(photoWidth, photoHeight, 24);
+        outputCam = Camera.main;
+    }
+
+    private Texture2D CaptureFromCamera(Camera cam, int width, int height)
+    {
+        RenderTexture rt = new RenderTexture(width, height, 24);
+        cam.targetTexture = rt;
+        cam.Render();
+
+        RenderTexture.active = rt;
+        Texture2D image = new Texture2D(width, height, TextureFormat.RGB24, false);
+        image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        image.Apply();
+
+        cam.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(rt); // cleanup
+
+        return image;
+    }
+
+    public void TakePhoto()
+    {
+        int photoWidth = 512; // You can make this adjustable if needed
+
+        // Calculate height based on current screen aspect ratio
+        float aspectRatio = (float)Screen.height / Screen.width;
+        int photoHeight = Mathf.RoundToInt(photoWidth * aspectRatio);
+
+        Texture2D photo = CaptureFromCamera(outputCam, photoWidth, photoHeight);
+        photoAlbum.Add(photo);
+
+        Debug.Log($"Photo taken! {photoWidth}x{photoHeight} | Total: {photoAlbum.Count}");
+    }
+
+
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            rightClickPressed = true;
+        }
+        if (context.canceled)
+        {
+            rightClickPressed = false;
+        }
+    }
+
+    public void OnLeftClick(InputAction.CallbackContext context)
+    {
+        if (context.performed && rightClickPressed)
+        {
+            TakePhoto();
+        }
+    }
+
+    private void Update()
+    {
+        float targetFOV = rightClickPressed ? zoomedFOV : normalFOV;
+
+        // Smoothly interpolate toward the target FOV
+        pictureCam.Lens.FieldOfView = Mathf.Lerp(
+            pictureCam.Lens.FieldOfView,
+            targetFOV,
+            Time.deltaTime * zoomSpeed
+        );
+    }
+    public Texture2D getLastestPhoto()
+    {
+        if (photoAlbum.Count > 0)
+        {
+            return photoAlbum[photoAlbum.Count - 1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+}
