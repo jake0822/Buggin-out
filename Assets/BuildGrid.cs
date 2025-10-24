@@ -5,13 +5,16 @@ using UnityEngine.UI;
 
 public class BuildGrid : MonoBehaviour
 {
-    PictureMode pictureMode;
+    public GridLayoutGroup layout;
+    public PictureMode pictureMode;
     [Header("References")]
     public GameObject imagePrefab;  // Prefab with an Image component
-    public Transform contentParent; // Content RectTransform (with GridLayoutGroup)
+    public Transform contentParent;
     
     [Header("Data")]
     public List<Texture2D> textures; // Your list of textures
+
+   
 
     void Start()
     {
@@ -29,6 +32,8 @@ public class BuildGrid : MonoBehaviour
 
     public void PopulateGrid()
     {
+       
+            
         // Clear old children (if you want to refresh the grid)
         foreach (Transform child in contentParent)
         {
@@ -37,6 +42,7 @@ public class BuildGrid : MonoBehaviour
 
         foreach (Texture2D tex in textures)
         {
+            
             GameObject newItem = Instantiate(imagePrefab, contentParent);
             Image img = newItem.GetComponent<Image>();
 
@@ -51,6 +57,8 @@ public class BuildGrid : MonoBehaviour
                 img.sprite = newSprite;
             }
         }
+        
+          
 
         // Force the layout to update immediately (Unity sometimes delays it by a frame)
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent.GetComponent<RectTransform>());

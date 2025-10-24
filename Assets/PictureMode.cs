@@ -31,6 +31,7 @@ public class PictureMode : MonoBehaviour
     [HideInInspector]public int remainingPhotos;
     public GameObject gameOver;
     public PauseGameManager pauseManager;
+    private bool endRound;
 
     private void Start()
     {
@@ -102,8 +103,9 @@ public class PictureMode : MonoBehaviour
     {
         roundTime = Mathf.Clamp(roundTime - Time.deltaTime, 0, roundTime);
         roundTimeText.text = roundTime.ToString("0.00");
-        if (roundTime <= 0 || remainingPhotos <= 0)
+        if ((roundTime <= 0 || remainingPhotos <= 0)&& !endRound)
         {
+            endRound = true;
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None; // Unlock the cursor
             Cursor.visible = true;
@@ -140,6 +142,7 @@ public class PictureMode : MonoBehaviour
         }
         else
         {
+            
             return defaultPic;
         }
     }

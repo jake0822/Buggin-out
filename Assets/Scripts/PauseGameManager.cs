@@ -88,6 +88,12 @@ public class PauseGameManager : MonoBehaviour
         photoGalleryMenu.SetActive(true);
     }
 
+    public void backFromGrid()
+    {
+        gameOverMenu.SetActive(true);
+        photoGalleryMenu.SetActive(false);
+    }
+
     public void RestartGame()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
