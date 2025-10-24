@@ -11,6 +11,10 @@ public class PauseGameManager : MonoBehaviour
     public GameObject pauseMenu;
 
     public GameObject startMenu;
+    
+    public GameObject gameOverMenu;
+    
+    public GameObject photoGalleryMenu;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -76,6 +80,12 @@ public class PauseGameManager : MonoBehaviour
         canPause = true;
         Cursor.lockState = CursorLockMode.Locked; // Lock cursor again for gameplay
         Cursor.visible = false;
+    }
+
+    public void showGrid()
+    {
+        gameOverMenu.SetActive(false);
+        photoGalleryMenu.SetActive(true);
     }
 
     public void RestartGame()

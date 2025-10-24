@@ -21,7 +21,7 @@ public class PictureMode : MonoBehaviour
     public int photoWidth = 512;
     public int photoHeight = 512;
 
-    private List<Texture2D> photoAlbum = new List<Texture2D>();
+    [HideInInspector]public List<Texture2D> photoAlbum = new List<Texture2D>();
     private RenderTexture renderTex;
     
     public int availablePhotos = 15;
