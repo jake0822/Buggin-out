@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,9 +23,17 @@ public class PictureMode : MonoBehaviour
 
     private List<Texture2D> photoAlbum = new List<Texture2D>();
     private RenderTexture renderTex;
+    
+    public int availablePhotos = 15;
+    public float roundTime = 15f;
+    public TextMeshProUGUI roundTimeText;
+    public TextMeshProUGUI remainingText;
+    [HideInInspector]public int remainingPhotos;
 
     private void Start()
     {
+        remainingPhotos = availablePhotos;
+        remainingText.text = remainingPhotos + " Photos Remaining";
         renderTex = new RenderTexture(photoWidth, photoHeight, 24);
         outputCam = Camera.main;
     }
@@ -58,6 +67,9 @@ public class PictureMode : MonoBehaviour
         Texture2D photo = CaptureFromCamera(outputCam, photoWidth, photoHeight);
         photoAlbum.Add(photo);
 
+        remainingPhotos--;
+        remainingText.text = remainingPhotos + " Photos Remaining";
+
         Debug.Log($"Photo taken! {photoWidth}x{photoHeight} | Total: {photoAlbum.Count}");
     }
 
@@ -84,6 +96,8 @@ public class PictureMode : MonoBehaviour
 
     private void Update()
     {
+        roundTime = Mathf.Clamp(roundTime - Time.deltaTime, 0, roundTime);
+        roundTimeText.text = roundTime.ToString("0.00");
         if (rightClickPressed)
         {
             Color c = crosshair.color;
