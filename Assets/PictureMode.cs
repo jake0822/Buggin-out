@@ -113,13 +113,13 @@ public class PictureMode : MonoBehaviour
             pauseManager.canPause = false;
         }
         
-        if (rightClickPressed)
+        if (rightClickPressed&& !endRound)
         {
             Color c = crosshair.color;
             c.a = 1f;
             crosshair.color = c;
         }
-        else
+        else if (!endRound)
         {
             Color c = crosshair.color;
             c.a = 0f;
