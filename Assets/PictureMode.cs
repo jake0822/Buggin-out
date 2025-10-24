@@ -29,6 +29,8 @@ public class PictureMode : MonoBehaviour
     public TextMeshProUGUI roundTimeText;
     public TextMeshProUGUI remainingText;
     [HideInInspector]public int remainingPhotos;
+    public GameObject gameOver;
+    public PauseGameManager pauseManager;
 
     private void Start()
     {
@@ -58,6 +60,8 @@ public class PictureMode : MonoBehaviour
 
     public void TakePhoto()
     {
+        if(Time.timeScale < 1)
+            return;
         int photoWidth = 512; // You can make this adjustable if needed
 
         // Calculate height based on current screen aspect ratio
@@ -98,6 +102,15 @@ public class PictureMode : MonoBehaviour
     {
         roundTime = Mathf.Clamp(roundTime - Time.deltaTime, 0, roundTime);
         roundTimeText.text = roundTime.ToString("0.00");
+        if (roundTime <= 0 || remainingPhotos <= 0)
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None; // Unlock the cursor
+            Cursor.visible = true;
+            gameOver.SetActive(true);
+            pauseManager.canPause = false;
+        }
+        
         if (rightClickPressed)
         {
             Color c = crosshair.color;

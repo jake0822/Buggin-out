@@ -48,8 +48,8 @@ public class PlayerController : MonoBehaviour //Network Behavior for multi
         castHeight = (_collider.height / 2 * transform.localScale.y) - _collider.height * 0.25f;
         radius = _collider.radius;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
 
     }
    /* public override void OnNetworkSpawn()
